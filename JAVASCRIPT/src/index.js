@@ -1,17 +1,20 @@
+import { getRandomActivity } from './activity.js';
+
+/**
+ * Обновляет активность с интервалом в минуту, используя функцию getRandomActivity.
+ */
 async function updateActivity() {
     try {
         const activity = await getRandomActivity();
-        const activityElement = document.getElementById('activity');
-        activityElement.textContent = activity;
+        document.getElementById('activity').innerText = activity;
     } catch (error) {
-        console.error('Error updating activity:', error);
-        const activityElement = document.getElementById('activity');
-        activityElement.textContent = 'К сожалению, произошла ошибка';
+        console.error('Error fetching activity:', error.message);
+    } finally {
+        document.addEventListener("DOMContentLoaded", function() {
+            setTimeout(updateActivity, 1000);
+        });
+        
     }
 }
 
-// Обновлять активность каждую минуту
-setInterval(updateActivity, 60000);
-
-// Вызов функции updateActivity при загрузке страницы
-document.addEventListener('DOMContentLoaded', updateActivity);
+updateActivity();
